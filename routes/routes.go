@@ -2,19 +2,40 @@ package routes
 
 import (
     "gin-api/controllers"
+	"gin-api/service"
+	"gin-api/middleware"
+	"net/http"
 
     "github.com/gin-gonic/gin"
     "github.com/jinzhu/gorm"
 )
 
 func SetupRoutes(db *gorm.DB) *gin.Engine {
+
+	var loginService service.LoginService = service.StaticLoginService()
+	var jwtService service.JWTService = service.JWTAuthService()
+	var loginController controllers.LoginController = controllers.LoginHandler(loginService, jwtService)
+
+
     r := gin.Default()
+
     r.Use(func(c *gin.Context) {
         c.Set("db", db)
     })
 
+	r.POST("/login", func(c *gin.Context) {
+		token := loginController.Login(c)
+		if token != "" {
+			c.JSON(http.StatusOK, gin.H{
+				"token": token,
+			})
+		} else {
+			c.JSON(http.StatusUnauthorized, gin.H{"code_message" : 401, "message": "Failed", "error": "Login Failed"})
+		}
+	})
 	
-	v1 := r.Group("api/v1")
+	
+	v1 := r.Group("api/v1", middleware.AuthorizeJWT())
   	{
 		// PROFILE
 		v1.GET("/allprofiles", controllers.FindProfiles)
