@@ -4,13 +4,11 @@ import (
     "gin-api/models"
 	"gin-api/repository"
 	"gin-api/utils"
-    // "gin-api/middleware"
     "net/http"
     "time"
-    // "fmt"
 
     "github.com/gin-gonic/gin"
-    // "github.com/jinzhu/gorm"
+    "github.com/jinzhu/gorm"
 )
 
 type CreateProfileInput struct {
@@ -70,8 +68,8 @@ func CreateProfile(c *gin.Context) {
 
     // Create profiles
     profile := models.Profile{Name: input.Name, Birth: birth}
-    // db := c.MustGet("db").(*gorm.DB)
-    // db.Create(&profile)
+    db := c.MustGet("db").(*gorm.DB)
+    db.Create(&profile)
 
     c.JSON(http.StatusOK, gin.H{"code_message" : 200, "message": "Success", "data": profile})
 }
