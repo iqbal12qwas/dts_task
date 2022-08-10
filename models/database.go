@@ -7,7 +7,7 @@ import (
 type Task struct {
     ID         uint      `json:"id" gorm:"primary_key"`
 	IdProfile int    `json:"id_profile" validate:"required"`
-    AssingedTo string    `json:"assigned_to" validate:"required"`
+    AssignedTo string    `json:"assigned_to" validate:"required"`
     Task       string    `json:"task" validate:"required"` 
     Deadline   time.Time `json:"deadline" validate:"required"`
     CreatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`

@@ -13,13 +13,13 @@ import (
 
 type CreateTaskInput struct {
     IdProfile int `json:"id_profile"`
-    AssingedTo string `json:"assignedTo"`
+    AssignedTo string `json:"assignedTo"`
     Task       string `json:"task"`
     Deadline   string `json:"deadline`
 }
 
 type UpdateTaskInput struct {
-    AssingedTo string `json:"assignedTo"`
+    AssignedTo string `json:"assignedTo"`
     Task       string `json:"task"`
     Deadline   string `json:"deadline`
 }
@@ -69,7 +69,7 @@ func CreateTask(c *gin.Context) {
     deadline, _ := time.Parse(date, input.Deadline)
 
     // Create task
-    task := models.Task{IdProfile: input.IdProfile, AssingedTo: input.AssingedTo, Task: input.Task, Deadline: deadline}
+    task := models.Task{IdProfile: input.IdProfile, AssignedTo: input.AssignedTo, Task: input.Task, Deadline: deadline}
     db := c.MustGet("db").(*gorm.DB)
     db.Create(&task)
 
@@ -112,7 +112,7 @@ func UpdateTask(c *gin.Context) {
 
     var updatedInput models.Task
     updatedInput.Deadline = deadline
-    updatedInput.AssingedTo = input.AssingedTo
+    updatedInput.AssignedTo = input.AssignedTo
     updatedInput.Task = input.Task
 
     _, err = repository.UpdateTask(task, updatedInput)

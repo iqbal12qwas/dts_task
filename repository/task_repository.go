@@ -9,7 +9,7 @@ func GetAllTasks(task *models.Task, pagination *helper.Pagination) (*[]models.Ta
 	var tasks []models.Task
 	offset := (pagination.Page - 1) * pagination.Limit
 	queryBuider := models.SetupDB().Limit(pagination.Limit).Offset(offset).Order(pagination.Sort)
-	result := queryBuider.Model(&models.Task{}).Where(task).Where("assinged_to like ?", "%"+pagination.Search+"%").Find(&tasks)
+	result := queryBuider.Model(&models.Task{}).Where(task).Where("assigned_to like ?", "%"+pagination.Search+"%").Find(&tasks)
 	if result.Error != nil {
 		msg := result.Error
 		return nil, msg
