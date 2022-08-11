@@ -103,7 +103,7 @@ func UpdateProfile(c *gin.Context) {
     // Validate input
     var input UpdateProfileInput
     if err := c.ShouldBindJSON(&input); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"code_message" : 200, "message": "Failed", "error": err.Error()})
+        c.JSON(http.StatusBadRequest, gin.H{"code_message" : 400, "message": "Failed", "error": err.Error()})
         return
     }
 

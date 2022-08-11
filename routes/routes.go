@@ -3,7 +3,7 @@ package routes
 import (
     "gin-api/controllers"
 	"gin-api/service"
-	"gin-api/middleware"
+	// "gin-api/middleware"
 	"net/http"
 
     "github.com/gin-gonic/gin"
@@ -33,9 +33,12 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 			c.JSON(http.StatusUnauthorized, gin.H{"code_message" : 401, "message": "Failed", "error": "Login Failed"})
 		}
 	})
+
+	r.Static("/css", "./templates/css")
+	r.LoadHTMLGlob("templates/*.html")
 	
 	
-	v1 := r.Group("api/v1", middleware.AuthorizeJWT())
+	v1 := r.Group("api/v1")
   	{
 		// PROFILE
 		v1.GET("/allprofiles", controllers.FindProfiles)
@@ -53,5 +56,10 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
     	v1.PATCH("/tasks/:id", controllers.UpdateTask)
     	v1.DELETE("tasks/:id", controllers.DeleteTask)
   	}
+
+	  view := r.Group("view")
+	  {
+		  view.GET("/index", controllers.ShowAll)
+	  }
     return r
 }
